@@ -1,32 +1,31 @@
 import React from 'react';
-import {useNavigate} from "react-router-dom";
+import {Component} from "react";
 
-const userLogin =(username, password) => {
-    console.log("username: " + username + " password: " + password)
-    useNavigate().navigate("/home");
-};
-
-class Login extends React.Component {
-
+class Login extends Component {
     constructor(props) {
         super(props);
+
         this.state = {
             username: '',
             password: ''
         };
+
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
     }
+
+    // bro how do i get this to redirect to the /home path
+    userLogin(props) {
+        alert('Username: ' + this.state.username + ' Password: ' + this.state.password);
+    };
 
     handleChange(event) {
         this.setState({[event.target.name]: event.target.value});
     }
 
     handleSubmit(event) {
+        this.userLogin(this.props)
         event.preventDefault();
-        const {username, password} = this.state;
-        const {onSubmit} = this.props;
-        userLogin(username, password)
     }
 
     render() {
