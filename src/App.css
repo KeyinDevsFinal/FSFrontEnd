@@ -1,0 +1,24 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+
+.home {
+  width: 60%;
+  margin: auto;
+}
+
+.login {
+  width: 60%;
+  margin: 56px auto;
+  text-align: center;
+}
+
+.data {
+  background-color: rgba(0,100,255,0.15);
+}
+
+.display {
+  width: 100%;
+  background-color: rgba(0,0,0,0.15);
+}
