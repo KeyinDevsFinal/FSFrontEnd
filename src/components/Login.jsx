@@ -1,51 +1,48 @@
-import React from 'react';
-import {Component} from "react";
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
-class Login extends Component {
-    constructor(props) {
-        super(props);
+const Login = (props) => {
+    const [username, setUsername] = useState('');
+    const [password, setPassword] = useState('');
+    const navigate = useNavigate();
 
-        this.state = {
-            username: '',
-            password: ''
-        };
-
-        this.handleChange = this.handleChange.bind(this);
-        this.handleSubmit = this.handleSubmit.bind(this);
+    const handleChange = (event) => {
+        switch (event.target.name) {
+            case 'username':
+                setUsername(event.target.value);
+                break;
+            case 'password':
+                setPassword(event.target.value);
+                break;
+            default:
+                break;
+        }
     }
 
-    // bro how do i get this to redirect to the /home path
-    userLogin(props) {
-        alert('Username: ' + this.state.username + ' Password: ' + this.state.password);
-    };
+    const login = () => {
+        // TODO: Implement login logic
+        props.setUser({username: username, password: password})
+        navigate('/home');
 
-    handleChange(event) {
-        this.setState({[event.target.name]: event.target.value});
     }
 
-    handleSubmit(event) {
-        this.userLogin(this.props)
-        event.preventDefault();
-    }
-
-    render() {
-        const {username, password} = this.state;
-        return (
-            <form onSubmit={this.handleSubmit}>
+    return (
+        <div className={"login"}>
+            <form onSubmit={login}>
                 <div className={"userName-input"}>
                     <label htmlFor="username">Username</label>
-                    <input type="text" name="username" value={username} onChange={this.handleChange} />
+                    <input type="text" name="username" value={username} onChange={handleChange} />
                 </div>
 
                 <div className={"password-input"}>
                     <label htmlFor="password">Password</label>
-                    <input type="password" name="password" value={password} onChange={this.handleChange} />
+                    <input type="password" name="password" value={password} onChange={handleChange} />
                 </div>
 
                 <button type="submit">Login</button>
             </form>
-        );
-    }
+        </div>
+    );
 }
 
 export default Login;
