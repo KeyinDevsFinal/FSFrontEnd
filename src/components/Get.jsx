@@ -3,7 +3,7 @@ import EditOptions from "./EditOptions";
 
 const Get = () => {
     const [dataKey, setDataKey] = useState("airport");
-    let [data, setData] = useState([]);
+    let [data, setData] = useState({});
     let tmp = [];
 
     const getData = async (dataKey) => {
@@ -13,26 +13,19 @@ const Get = () => {
             method: "GET",
             headers: {
                 "Content-Type": "application/json",
-                "Authorization": "Basic" + btoa("admin" + ":" + "admin")
+                "Authorization": "Basic " + btoa("admin" + ":" + "admin")
             }
         }).then((response) => response.json()).then((data) => setData(data));
     }
 
     useEffect(() => {
-        getData(dataKey);
+        getData(dataKey)
     }, [dataKey]);
 
-    console.log(data);
 
-    if (data.length === 0) {
-        tmp.push(<div className={"content_panel"} key={0}><h3>No Data</h3></div>);
-
-    }else{
-    switch (dataKey) {
+    switch (data._embedded) {
         case "airport":
-            let airports = data.data._embedded.airport
-            console.log(data.data);
-            console.log(airports);
+            let airports = data._embedded.airport
             for (let i = 0; i < airports.length; i++) {
                 tmp.push(
                     <div className={"content_panel"} key={i}>
@@ -47,8 +40,7 @@ const Get = () => {
             break;
 
         case "aircraft":
-            let aircraft = data.data._embedded.aircraft;
-            console.log(aircraft);
+            let aircraft = data._embedded.aircraft;
             for (let i = 0; i < aircraft.length; i++) {
                 tmp.push(
                     <div className={"content_panel"} key={i}>
@@ -64,7 +56,7 @@ const Get = () => {
             break;
 
         case "passenger":
-            let passengers = data.data._embedded.passenger;
+            let passengers = data._embedded.passenger;
             for (let i = 0; i < passengers.length; i++) {
                 tmp.push(
                     <div className={"content_panel"} key={i}>
@@ -79,7 +71,7 @@ const Get = () => {
             break;
 
         case "city":
-            let cities = data.data._embedded.city;
+            let cities = data._embedded.city;
             for (let i = 0; i < cities.length; i++) {
                 tmp.push(
                     <div className={"content_panel"} key={i}>
@@ -94,7 +86,11 @@ const Get = () => {
             break;
         default:
             break;
-    }}
+    }
+
+    if (tmp.length === 0) {
+        tmp = <h3>No {dataKey} found</h3>
+    }
 
     return (
         <div className={"get"}>
