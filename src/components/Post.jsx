@@ -2,7 +2,16 @@ import {useState} from "react";
 
 const Post = (props) => {
     let tmp = <></>
-    const [option, setOption] = useState("airports");
+    const [option, setOption] = useState("airports");const [code, setCode] = useState("");
+    const [name, setName] = useState("");
+    const [airline, setAirline] = useState("");
+    const [type, setType] = useState("");
+    const [model, setModel] = useState("");
+    const [firstName, setFirstName] = useState("");
+    const [lastName, setLastName] = useState("");
+    const [phoneNumber, setPhoneNumber] = useState("");
+    const [cityName, setCityName] = useState("");
+    const [province, setProvince] = useState("");
 
 
     const postAirport = (code,name) => {
@@ -126,11 +135,11 @@ const Post = (props) => {
             <form>
                 <label>Data type:</label>
                 <select>
-                    <option value={"airport"} onChange={setOption("airport")}>Airport</option>
-                    <option value={"city"} onChange={setOption("city")}>City</option>
-                    <option value={"aircraft"} onChange={setOption("aircraft")}>Aircraft</option>
-                    <option value={"flight"} onChange={setOption("flight")}>Flight</option>
-                    <option value={"passenger"} onChange={setOption("passenger")}>Passenger</option>
+                    <option value={"airport"}>Airport</option>
+                    <option value={"city"}>City</option>
+                    <option value={"aircraft"}>Aircraft</option>
+                    <option value={"flight"}>Flight</option>
+                    <option value={"passenger"}>Passenger</option>
                     {tmp}
                 </select>
             </form>

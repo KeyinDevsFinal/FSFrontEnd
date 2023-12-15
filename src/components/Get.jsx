@@ -3,11 +3,13 @@ import EditOptions from "./EditOptions";
 
 const Get = () => {
     const [dataKey, setDataKey] = useState("airport");
-    let [data, setData] = useState({});
+    let [data, setData] = useState([]);
     let tmp = [];
 
+
     const getData = async (dataKey) => {
-        let url = "http://localhost:80/" + dataKey;
+        let url = `http://localhost:80/${dataKey}`;
+        console.log(url)
 
         await fetch(url, {
             method: "GET",
@@ -15,25 +17,36 @@ const Get = () => {
                 "Content-Type": "application/json",
                 "Authorization": "Basic " + btoa("admin" + ":" + "admin")
             }
-        }).then((response) => response.json()).then((data) => setData(data));
+        })
+            .then((response) => {return response.json()})
+            .then((data) => {
+                console.log(data._embedded);
+                setData(data)
+            });
     }
 
     useEffect(() => {
-        getData(dataKey)
+        getData(dataKey);
     }, [dataKey]);
 
 
-    switch (data._embedded) {
+    let switchKey = "";
+    if (data._embedded !== undefined) {
+        switchKey = Object.keys(data._embedded)[0];
+    }
+
+
+    switch (switchKey) {
         case "airport":
             let airports = data._embedded.airport
             for (let i = 0; i < airports.length; i++) {
                 tmp.push(
                     <div className={"content_panel"} key={i}>
-                        <h3>Code: {airports[i].code}</h3>
-                        <div className={"flex"}>
+                        <div>
+                            <h4>Code: {airports[i].code}</h4>
                             <h4>{airports[i].name}</h4>
-                            <EditOptions />
                         </div>
+                        <EditOptions />
                     </div>
                 );
             }
@@ -44,12 +57,12 @@ const Get = () => {
             for (let i = 0; i < aircraft.length; i++) {
                 tmp.push(
                     <div className={"content_panel"} key={i}>
-                        <h3>{aircraft[i].airlineName}</h3>
-                        <div className={"flex"}>
+                        <>{aircraft[i].airlineName}</>
+                        <div>
                             <h4>Type: {aircraft[i].type}</h4>
                             <h4>Model: {aircraft[i].model}</h4>
-                            <EditOptions />
                         </div>
+                        <EditOptions />
                     </div>
                 );
             }
@@ -60,11 +73,11 @@ const Get = () => {
             for (let i = 0; i < passengers.length; i++) {
                 tmp.push(
                     <div className={"content_panel"} key={i}>
-                        <div className={"flex"}>
-                            <h3>{passengers[i].firstName} {passengers[i].lastName}</h3>
+                        <div>
+                            <h4>{passengers[i].firstName} {passengers[i].lastName}</h4>
                             <h4>Phone: {passengers[i].phoneNumber}</h4>
-                            <EditOptions />
                         </div>
+                        <EditOptions />
                     </div>
                 );
             }
@@ -75,11 +88,11 @@ const Get = () => {
             for (let i = 0; i < cities.length; i++) {
                 tmp.push(
                     <div className={"content_panel"} key={i}>
-                        <div className={"flex"}>
-                            <h3>{cities[i].name}</h3>
+                        <div>
+                            <h4>{cities[i].name}</h4>
                             <h4>{cities[i].province}</h4>
-                            <EditOptions />
                         </div>
+                        <EditOptions />
                     </div>
                 );
             }
@@ -89,12 +102,15 @@ const Get = () => {
     }
 
     if (tmp.length === 0) {
-        tmp = <h3>No {dataKey} found</h3>
+        tmp.push(
+            <div className={"content_panel"} key={0}>
+                <h4>No {dataKey} Data</h4>
+            </div>);
     }
 
     return (
         <div className={"get"}>
-            <div className={""}>
+            <div className={"get_nav"}>
                 <button onClick={() => setDataKey("airport")}>Airports</button>
                 <button onClick={() => setDataKey("aircraft")}>Aircraft</button>
                 <button onClick={() => setDataKey("passenger")}>Passengers</button>
@@ -103,7 +119,6 @@ const Get = () => {
             {tmp}
         </div>
     )
-
 };
 
 export default Get;

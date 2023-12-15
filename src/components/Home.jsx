@@ -7,11 +7,11 @@ const Home = (props) => {
 
 
     return (
-        <div className={"display"}>
-            <div className={"home"}>
-                <button onClick={() => setShowPost(!post)}>Post</button>
-                <Get />
-                {post && <Post />}
+        <div className={"home"}>
+            <button name={"post_page"} onClick={() => setShowPost(!post)}>Post</button>
+            <div className={"display"}>
+                <Get/>
+                {post && <Post/>}
             </div>
         </div>
     )
