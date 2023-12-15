@@ -1,16 +1,33 @@
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import EditOptions from "./EditOptions";
 
-const getData = async (dataKey) => {
-    return await fetch("http://localhost:80/" + dataKey).then((response) => {response.json()}).then((data) => {return data});
-}
-
 const Get = () => {
-    const [dataKey, setDataKey] = useState("");
+    const [dataKey, setDataKey] = useState("airport");
+    let [data, setData] = useState([]);
     let tmp = [];
-    let data = getData(dataKey);
+
+    const getData = async (dataKey) => {
+        let url = "http://localhost:80/" + dataKey;
+
+        await fetch(url, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": "Basic" + btoa("admin" + ":" + "admin")
+            }
+        }).then((response) => response.json()).then((data) => setData(data));
+    }
+
+    useEffect(() => {
+        getData(dataKey);
+    }, [dataKey]);
+
     console.log(data);
 
+    if (data.length === 0) {
+        tmp.push(<div className={"content_panel"} key={0}><h3>No Data</h3></div>);
+
+    }else{
     switch (dataKey) {
         case "airport":
             let airports = data.data._embedded.airport
@@ -75,7 +92,9 @@ const Get = () => {
                 );
             }
             break;
-    }
+        default:
+            break;
+    }}
 
     return (
         <div className={"get"}>
