@@ -116,7 +116,9 @@ const Get = () => {
                 <button onClick={() => setDataKey("passenger")}>Passengers</button>
                 <button onClick={() => setDataKey("city")}>Cities</button>
             </div>
-            {tmp}
+            <div className={"content"}>
+                {tmp}
+            </div>
         </div>
     )
 };

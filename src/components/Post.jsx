@@ -1,8 +1,11 @@
-import {useState} from "react";
+import {useEffect, useState} from "react";
 
-const Post = (props) => {
+const Post = () => {
     let tmp = <></>
-    const [option, setOption] = useState("airports");const [code, setCode] = useState("");
+    const [option, setOption] = useState("airports");
+
+
+    const [code, setCode] = useState("");
     const [name, setName] = useState("");
     const [airline, setAirline] = useState("");
     const [type, setType] = useState("");
@@ -84,9 +87,8 @@ const Post = (props) => {
         });
     };
 
-
     switch (option){
-        case "airports":
+        case "airport":
             tmp = (
                 <div className={"content_panel"}>
                     <h3>Airports</h3>
@@ -107,7 +109,7 @@ const Post = (props) => {
                 </div>
             );
             break;
-        case "passengers":
+        case "passenger":
             tmp = (
                 <div className={"content_panel"}>
                     <h3>Passenger</h3>
@@ -118,7 +120,7 @@ const Post = (props) => {
                 </div>
             );
             break;
-        case "cities":
+        case "city":
             tmp = (
                 <div className={"content_panel"}>
                     <h3>Cities</h3>
@@ -129,19 +131,20 @@ const Post = (props) => {
             );
     }
 
-
     return (
         <div className={"post"}>
             <form>
                 <label>Data type:</label>
-                <select>
+                <select onChange={(event) => setOption(event.target.value)}>
                     <option value={"airport"}>Airport</option>
                     <option value={"city"}>City</option>
                     <option value={"aircraft"}>Aircraft</option>
                     <option value={"flight"}>Flight</option>
                     <option value={"passenger"}>Passenger</option>
-                    {tmp}
                 </select>
+                <div className={"content"}>
+                    {tmp}
+                </div>
             </form>
         </div>
     );
