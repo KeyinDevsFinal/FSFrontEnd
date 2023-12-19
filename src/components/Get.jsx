@@ -97,6 +97,37 @@ const Get = () => {
                 );
             }
             break;
+
+        case "flight":
+            let flights = data._embedded.flight;
+            for (let i = 0; i < flights.length; i++) {
+                tmp.push(
+                    <div className={"content_panel"} key={i}>
+                        <div>
+                            <h4>{flights[i].flightNumber}</h4>
+                            <h4>{flights[i].departureTime}</h4>
+                            <h4>{flights[i].arrivalTime}</h4>
+                            <h4>{flights[i].status}</h4>
+                        </div>
+                        <EditOptions />
+                    </div>
+                );
+            }
+            break;
+
+        case "airline":
+            let airlines = data._embedded.airline;
+            for (let i = 0; i < airlines.length; i++) {
+                tmp.push(
+                    <div className={"content_panel"} key={i}>
+                        <div>
+                            <h4>{airlines[i].name}</h4>
+                        </div>
+                        <EditOptions />
+                    </div>
+                );
+            }
+            break;
         default:
             break;
     }
@@ -109,7 +140,7 @@ const Get = () => {
     }
 
     return (
-        <div className={"get"}>
+        <div className={"panel"}>
             <div className={"get_nav"}>
                 <button onClick={() => setDataKey("airport")}>Airports</button>
                 <button onClick={() => setDataKey("aircraft")}>Aircraft</button>

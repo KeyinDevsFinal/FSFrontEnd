@@ -70,7 +70,7 @@ button {
   text-align: center;
 }
 
-.get {
+.panel {
   width: fit-content;
   background-color: rgba(255,255,255,0.65);
   display: flex;
@@ -85,12 +85,29 @@ button {
   margin-left: auto;
 }
 
+.post_input {
+  width: 496px;
+  border: none;
+  text-align: center;
+  background-color: transparent;
+  font-size: 16px;
+  padding: 0 8px;
+}
+
 .content_panel {
   animation: breathe 7s linear infinite;
+  width: 432px;
   display: flex;
   height: fit-content;
-  /*background-color: rgba(0,144,200,0.15);*/
   border-bottom: 1px solid rgba(0,0,0,0.15);
+}
+
+.edit_options {
+  margin-left: auto;
+}
+
+input {
+  margin: 8px;
 }
 
 .data {
