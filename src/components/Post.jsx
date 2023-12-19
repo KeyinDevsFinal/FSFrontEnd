@@ -1,4 +1,4 @@
-import {useEffect, useState} from "react";
+import { useState} from "react";
 
 const Post = () => {
     let tmp = <></>
@@ -21,7 +21,8 @@ const Post = () => {
         fetch("http://localhost:80/airport", {
             method: "POST",
             headers: {
-                "Content-Type": "application/json"
+                "Content-Type": "application/json",
+                'Authorization': 'Basic ' + btoa('admin:admin')
             },
             body: JSON.stringify({
                 code: code,
@@ -29,7 +30,7 @@ const Post = () => {
             })
         }).then((response) => {
             return response.json();
-        }).then((data) => {
+        }).then(() => {
             alert("Airport Posted");
         });
     };
@@ -86,6 +87,40 @@ const Post = () => {
             alert("City Posted");
         });
     };
+
+    const postFlight = (cityName,province) => {
+        fetch("http://localhost:80/flight", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                name: cityName,
+                province: province
+            })
+        }).then((response) => {
+            return response.json();
+        }).then((data) => {
+            alert("Flight Posted");
+        });
+    }
+
+    const postAirline = (cityName,province) => {
+        fetch("http://localhost:80/airline", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                name: cityName,
+                province: province
+            })
+        }).then((response) => {
+            return response.json();
+        }).then((data) => {
+            alert("Airline Posted");
+        });
+    }
 
     switch (option){
         case "airport":
@@ -183,12 +218,14 @@ const Post = () => {
             );
             break;
 
+        default:
+            break;
     }
 
     return (
         <div className={"panel"}>
             <form>
-                <label>Data type:</label>
+                <label>Post: </label>
                 <select onChange={(event) => setOption(event.target.value)}>
                     <option value={"airport"}>Airport</option>
                     <option value={"city"}>City</option>

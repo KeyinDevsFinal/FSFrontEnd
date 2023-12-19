@@ -146,6 +146,8 @@ const Get = () => {
                 <button onClick={() => setDataKey("aircraft")}>Aircraft</button>
                 <button onClick={() => setDataKey("passenger")}>Passengers</button>
                 <button onClick={() => setDataKey("city")}>Cities</button>
+                <button onClick={() => setDataKey("flight")}>Flights</button>
+                <button onClick={() => setDataKey("airline")}>Airlines</button>
             </div>
             <div className={"content"}>
                 {tmp}
