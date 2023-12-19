@@ -7,6 +7,12 @@ import {useState} from "react";
 function App() {
     const [user, setUser] = useState({"username": "", "password": ""});
 
+    App.backendURL = "http://localhost:80";
+    App.headers = {
+        "Content-Type": "application/json",
+        "Authorization": "Basic " + btoa("admin" + ":" + "admin")
+    }
+
     return (
         <>
             <Router>

@@ -46,6 +46,10 @@
   }
 }
 
+.content {
+  max-height: 60%;
+}
+
 html {
   /*animation: breathe 7s linear infinite;*/
   background: black;
@@ -86,20 +90,23 @@ button {
 }
 
 .post_input {
-  width: 496px;
+  width: 379px;
   border: none;
-  text-align: center;
+  text-align: right;
   background-color: transparent;
   font-size: 16px;
   padding: 0 8px;
 }
 
 .content_panel {
-  animation: breathe 7s linear infinite;
   width: 432px;
   display: flex;
   height: fit-content;
   border-bottom: 1px solid rgba(0,0,0,0.15);
+}
+
+.content_panel:hover {
+  animation: breathe 7s linear infinite;
 }
 
 .edit_options {
