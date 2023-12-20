@@ -7,17 +7,18 @@ const Get = () => {
     let [data, setData] = useState([]);
     let tmp = [];
 
-    const[airport, setAirport] = useState([]);
-
+    const [originCode, setOriginCode] = useState(null);
+    const [destinationCode, setDestinationCode] = useState(null);
 
     const getData = async (dataKey) => {
         let url = `http://localhost:80/${dataKey}`;
-
         await fetch(url, {
             method: "GET",
             headers: App.headers
         })
-            .then((response) => {return response.json()})
+            .then((response) => {
+                return response.json()
+            })
             .then((data) => {
                 setData(data)
             });
@@ -27,21 +28,27 @@ const Get = () => {
         getData(dataKey);
     }, [dataKey]);
 
-
     let switchKey = "";
     if (data._embedded !== undefined) {
         switchKey = Object.keys(data._embedded)[0];
     }
 
-    const getAirportName = async (airportURL) => {
-        await fetch(airportURL, {
+    const getOriginCode = async (airportURL) => {
+        const response = await fetch(airportURL, {
             method: "GET",
             headers: App.headers
-        })
-            .then((response) => {return response.json()})
-            .then((data) => {
-                return data.name;
-        })
+        });
+        const data = await response.json();
+        setOriginCode(data.code);
+    }
+
+    const getDestinationCode = async (airportURL) => {
+        const response = await fetch(airportURL, {
+            method: "GET",
+            headers: App.headers
+        });
+        const data = await response.json();
+        setDestinationCode(data.code);
     }
 
 
@@ -107,11 +114,13 @@ const Get = () => {
         case "flight":
             let flights = data._embedded.flight;
             for (let i = 0; i < flights.length; i++) {
+                getOriginCode(flights[i]._links.origin.href)
+                getDestinationCode(flights[i]._links.destination.href)
                 tmp.push(
                     <div className={"content_panel"} key={i}>
                         <div>
                             <h4>{flights[i].flightNumber}</h4>
-                            <h4>{getAirportName(flights[i].origin)}</h4>
+                            <h4>Origin: {originCode} --> Destination: {destinationCode}</h4>
                         </div>
                         <EditOptions prop={flights[i].code} switchKey={switchKey} />
                     </div>
@@ -143,7 +152,7 @@ const Get = () => {
     }
 
     return (
-        <div className={"panel"}>
+        <div className={"panel_get"}>
             <div className={"get_nav"}>
                 <button onClick={() => setDataKey("airport")}>Airports</button>
                 <button onClick={() => setDataKey("aircraft")}>Aircraft</button>

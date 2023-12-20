@@ -5,7 +5,6 @@ import Post from "./Post";
 const Home = (props) => {
     return (
         <div className={"home"}>
-
             <div className={"display"}>
                 <Get/>
                 <Post/>

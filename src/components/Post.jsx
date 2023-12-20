@@ -14,13 +14,39 @@ const Post = () => {
     const [lastName, setLastName] = useState("");
     const [phoneNumber, setPhoneNumber] = useState("");
     const [origin, setOrigin] = useState("");
+    const [originURL, setOriginURL] = useState("");
     const [destination, setDestination] = useState("");
+    const [destinationURL, setDestinationURL] = useState("");
     const [flightNumber, setFlightNumber] = useState("");
     const [cityName, setCityName] = useState("");
     const [province, setProvince] = useState("");
 
-    const getAirportUrl = (code) => {
+    const getOriginUrl = (code) => {
+        let url = App.backendURL + "/airport/search/searchByCode?code=" + code;
+        fetch(url, {
+                method: "GET",
+                Headers: App.headers
+            })
+            .then((response) => {
+               return response.json();
+            })
+            .then((data) => {
+                setOriginURL(data._embedded.airport[0]._links.self.href);
+            })
+    }
 
+    const getDestinationUrl = (code) => {
+        let url = App.backendURL + "/airport/search/searchByCode?code=" + code;
+        fetch(url, {
+                method: "GET",
+                Headers: App.headers
+            })
+            .then((response) => {
+               return response.json();
+            })
+            .then((data) => {
+                setDestinationURL(data._embedded.airport[0]._links.self.href);
+            })
     }
 
     const postAirport = (code,name) => {
@@ -68,8 +94,8 @@ const Post = () => {
         });
     };
 
-    const postCity = async (cityName,province) => {
-        await fetch(App.backendURL + '/city', {
+    const postCity = (cityName,province) => {
+        fetch(App.backendURL + '/city', {
             method: "POST",
             headers: App.headers,
             body: JSON.stringify({
@@ -83,14 +109,16 @@ const Post = () => {
         });
     };
 
-    const postFlight = (origin,destination,aircraft) => {
+    const postFlight = async (origin, destination, flightNumber) => {
+        getOriginUrl(origin);
+        getDestinationUrl(destination);
         fetch(App.backendURL + "/flight", {
             method: "POST",
             headers: App.headers,
             body: JSON.stringify({
                 flightNumber: flightNumber,
-                origin: origin,
-                destination: destination
+                origin: originURL,
+                destination: destinationURL
             })
         }).then((response) => {
             return response.json();
@@ -174,8 +202,7 @@ const Post = () => {
         case "flight":
             tmp = (
                 <>
-                    <h3>Flight</h3>
-                    <form className={"post_input"} onSubmit={(e) => {e.preventDefault();postFlight()}}>
+                    <form className={"post_input"} onSubmit={(e) => {e.preventDefault();postFlight(origin,destination,flightNumber)}}>
                         Flight number: <input type={"text"} onChange={(event_data) => setFlightNumber(event_data.target.value)} />
                         <br/>
                         Origin: <input type={"text"} onChange={(event_data) => setOrigin(event_data.target.value)} />
@@ -218,7 +245,7 @@ const Post = () => {
                     <option value={"passenger"}>Passenger</option>
                 </select>
             </form>
-            <div className={"content"}>
+            <div className={"content_post"}>
                 {tmp}
             </div>
         </div>
