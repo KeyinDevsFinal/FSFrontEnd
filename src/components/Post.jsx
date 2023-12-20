@@ -7,19 +7,28 @@ const Post = () => {
 
     const [code, setCode] = useState("");
     const [name, setName] = useState("");
+
     const [tailNumber, setTailNumber] = useState("");
     const [brand, setBrand] = useState("");
     const [model, setModel] = useState("");
+
     const [firstName, setFirstName] = useState("");
     const [lastName, setLastName] = useState("");
     const [phoneNumber, setPhoneNumber] = useState("");
+
     const [origin, setOrigin] = useState("");
     const [originURL, setOriginURL] = useState("");
     const [destination, setDestination] = useState("");
     const [destinationURL, setDestinationURL] = useState("");
     const [flightNumber, setFlightNumber] = useState("");
+
     const [cityName, setCityName] = useState("");
     const [province, setProvince] = useState("");
+
+    const [airlineName, setAirlineName] = useState("");
+    const [airlineCode, setAirlineCode] = useState("");
+    const [country, setCountry] = useState("");
+
 
     const getOriginUrl = (code) => {
         let url = App.backendURL + "/airport/search/searchByCode?code=" + code;
@@ -132,8 +141,9 @@ const Post = () => {
             method: "POST",
             headers: App.headers,
             body: JSON.stringify({
-                name: cityName,
-                province: province
+                name: airlineName,
+                airlineCode: airlineCode,
+                country: country
             })
         }).then((response) => {
             return response.json();
@@ -217,11 +227,12 @@ const Post = () => {
         case "airline":
             tmp = (
                 <>
-                    <h3>Airline</h3>
                     <form className={"post_input"} onSubmit={(e) => {e.preventDefault();postAirline(cityName,province)}}>
-                        Name: <input type={"text"} onChange={(event_data) => setCityName(event_data.target.value)} />
+                        Name: <input type={"text"} onChange={(event_data) => setAirlineName(event_data.target.value)} />
                         <br/>
-                        Province: <input type={"text"} onChange={(event_data) => setProvince(event_data.target.value)} />
+                        Airline Code: <input type={"text"} onChange={(event_data) => setAirlineCode(event_data.target.value)} />
+                        <br/>
+                        Country: <input type={"text"} onChange={(event_data) => setCountry(event_data.target.value)} />
                         <br/>
                         <button className={"post_button"}>Submit</button>
                     </form>

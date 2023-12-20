@@ -122,7 +122,7 @@ const Get = () => {
                             <h4>{flights[i].flightNumber}</h4>
                             <h4>Origin: {originCode} --> Destination: {destinationCode}</h4>
                         </div>
-                        <EditOptions prop={flights[i].code} switchKey={switchKey} />
+                        <EditOptions prop={flights[i].flightNumber} switchKey={switchKey} />
                     </div>
                 );
             }
@@ -134,8 +134,9 @@ const Get = () => {
                     <div className={"content_panel"} key={i}>
                         <div>
                             <h4>{airlines[i].name}</h4>
+                            <h4>{airlines[i].airlineCode} -- {airlines[i].country}</h4>
                         </div>
-                        <EditOptions prop={airlines[i].code} switchKey={switchKey} />
+                        <EditOptions prop={airlines[i].airlineCode} switchKey={switchKey} />
                     </div>
                 );
             }

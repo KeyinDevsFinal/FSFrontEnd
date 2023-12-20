@@ -30,10 +30,10 @@ const EditOptions = (props) => {
                 }).then(data => alert("Deleted " + data.cityname))
                 break;
             case "flight":
-                fetch(App.backendURL + "/flight/search/deleteByFlightnumber=" + prop, {
+                fetch(App.backendURL + "/flight/search/deleteByFlightNumber?flightNumber=" + prop, {
                     method: "GET",
                     headers: App.headers,
-                }).then(data => alert("Deleted " + data.flightnumber))
+                }).then(data => {alert("Deleted " + data.flightnumber);})
                 break;
             default:
                 break;
