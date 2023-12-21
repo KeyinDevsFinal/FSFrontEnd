@@ -1,36 +1,83 @@
-import {useState} from "react";
+import { useState} from "react";
+import App from "../App";
 
-const Post = (props) => {
+const Post = () => {
     let tmp = <></>
-    const [option, setOption] = useState("airports");
+    const [option, setOption] = useState("airport");
 
+    const [code, setCode] = useState("");
+    const [name, setName] = useState("");
+
+    const [tailNumber, setTailNumber] = useState("");
+    const [brand, setBrand] = useState("");
+    const [model, setModel] = useState("");
+
+    const [firstName, setFirstName] = useState("");
+    const [lastName, setLastName] = useState("");
+    const [phoneNumber, setPhoneNumber] = useState("");
+
+    const [origin, setOrigin] = useState("");
+    const [originURL, setOriginURL] = useState("");
+    const [destination, setDestination] = useState("");
+    const [destinationURL, setDestinationURL] = useState("");
+    const [flightNumber, setFlightNumber] = useState("");
+
+    const [cityName, setCityName] = useState("");
+    const [province, setProvince] = useState("");
+
+    const [airlineName, setAirlineName] = useState("");
+    const [airlineCode, setAirlineCode] = useState("");
+    const [country, setCountry] = useState("");
+
+
+    const getOriginUrl = (code) => {
+        let url = App.backendURL + "/airport/search/searchByCode?code=" + code;
+        fetch(url, {
+                method: "GET",
+                Headers: App.headers
+            })
+            .then((response) => {
+               return response.json();
+            })
+            .then((data) => {
+                setOriginURL(data._embedded.airport[0]._links.self.href);
+            })
+    }
+
+    const getDestinationUrl = (code) => {
+        let url = App.backendURL + "/airport/search/searchByCode?code=" + code;
+        fetch(url, {
+                method: "GET",
+                Headers: App.headers
+            })
+            .then((response) => {
+               return response.json();
+            })
+            .then((data) => {
+                setDestinationURL(data._embedded.airport[0]._links.self.href);
+            })
+    }
 
     const postAirport = (code,name) => {
-        fetch("http://localhost:80/airport", {
+        fetch(App.backendURL + '/airport', {
             method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
+            headers: App.headers,
             body: JSON.stringify({
-                code: code,
-                name: name
+                name: name,
+                code: code
             })
-        }).then((response) => {
-            return response.json();
-        }).then((data) => {
+        }).then(() => {
             alert("Airport Posted");
-        });
+        })
     };
 
-    const postAircraft = (airline,type,model) => {
-        fetch("http://localhost:80/aircraft", {
+    const postAircraft = (type,brand,model) => {
+        fetch(App.backendURL + "/aircraft", {
             method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
+            headers: App.headers,
             body: JSON.stringify({
-                airlineName: airline,
-                type: type,
+                tailnumber: tailNumber,
+                brand: brand,
                 model: model
             })
         }).then((response) => {
@@ -41,15 +88,13 @@ const Post = (props) => {
     };
 
     const postPassenger = (firstName,lastName,phoneNumber) => {
-        fetch("http://localhost:80/passenger", {
+        fetch(App.backendURL + "/passenger", {
             method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
+            headers: App.headers,
             body: JSON.stringify({
-                firstName: firstName,
-                lastName: lastName,
-                phoneNumber: phoneNumber
+                firstname: firstName,
+                lastname: lastName,
+                phone: phoneNumber
             })
         }).then((response) => {
             return response.json();
@@ -59,13 +104,11 @@ const Post = (props) => {
     };
 
     const postCity = (cityName,province) => {
-        fetch("http://localhost:80/city", {
+        fetch(App.backendURL + '/city', {
             method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
+            headers: App.headers,
             body: JSON.stringify({
-                name: cityName,
+                cityname: cityName,
                 province: province
             })
         }).then((response) => {
@@ -75,65 +118,147 @@ const Post = (props) => {
         });
     };
 
+    const postFlight = async (origin, destination, flightNumber) => {
+        getOriginUrl(origin);
+        getDestinationUrl(destination);
+        fetch(App.backendURL + "/flight", {
+            method: "POST",
+            headers: App.headers,
+            body: JSON.stringify({
+                flightNumber: flightNumber,
+                origin: originURL,
+                destination: destinationURL
+            })
+        }).then((response) => {
+            return response.json();
+        }).then((data) => {
+            alert("Flight Posted");
+        });
+    }
+
+    const postAirline = (cityName,province) => {
+        fetch(App.backendURL + '/airline', {
+            method: "POST",
+            headers: App.headers,
+            body: JSON.stringify({
+                name: airlineName,
+                airlineCode: airlineCode,
+                country: country
+            })
+        }).then((response) => {
+            return response.json();
+        }).then((data) => {
+            alert("Airline Posted");
+        });
+    }
 
     switch (option){
-        case "airports":
+        case "airport":
             tmp = (
-                <div className={"content_panel"}>
-                    <h3>Airports</h3>
-                    Code: <input id={"code"} type={"text"} onChange={(event_data) => setCode(event_data.target.value)}/>
-                    Name: <input id={"name"} type={"text"} onChange={(event_data) => setName(event_data.target.value)} />
-                    <button onClick={() => postAirport(code,name)}>Submit</button>
-                </div>
+                <>
+                    <form className={"post_input"} onSubmit={(e) => {e.preventDefault(); postAirport(code, name)}} >
+                        Code: <input id={"code"} type={"text"} onChange={(event_data) => setCode(event_data.target.value)}/>
+                        <br/>
+                        Name: <input id={"name"} type={"text"} onChange={(event_data) => setName(event_data.target.value)}/>
+                        <br/>
+                        <button type={"submit"} className={"post_button"} >Submit</button>
+                    </form>
+                </>
             );
             break;
         case "aircraft":
             tmp = (
-                <div className={"content_panel"}>
-                    <h3>Aircraft</h3>
-                    Airline: <input type={"text"} onChange={(event_data) => setAirline(event_data.target.value)} />
-                    Type: <input type={"text"} onChange={(event_data) => setType(event_data.target.value)} /> <br/>
-                    Model: <input type={"text"} onChange={(event_data) => setModel(event_data.target.value)} />
-                    <button onClick={() => postAircraft(airline,type,model)}>Submit</button>
-                </div>
+                <>
+                    <form className={"post_input"} onSubmit={(e) => {e.preventDefault();postAircraft(tailNumber,brand,model)}} >
+                        Tail-number: <input type={"text"} onChange={(event_data) => setTailNumber(event_data.target.value)} />
+                        <br/>
+                        Brand: <input type={"text"} onChange={(event_data) => setBrand(event_data.target.value)} />
+                        <br/>
+                        Model: <input type={"text"} onChange={(event_data) => setModel(event_data.target.value)} />
+                        <br/>
+                        <button type={"submit"} className={"post_button"}>Submit</button>
+                    </form>
+                </>
             );
             break;
-        case "passengers":
+        case "passenger":
             tmp = (
-                <div className={"content_panel"}>
-                    <h3>Passenger</h3>
-                    First Name: <input type={"text"} onChange={(event_data) => setFirstName(event_data.target.value)}/>
-                    Last Name: <input type={"text"} onChange={(event_data) => setLastName(event_data.target.value)}/> <br/>
-                    Phone Number: <input type={"text"} onChange={(event_data) => setPhoneNumber(event_data.target.value)} />
-                    <button onClick={() => postPassenger(firstName,lastName,phoneNumber)}>Submit</button>
-                </div>
+                <>
+                    <form className={"post_input"} onSubmit={(e) => {e.preventDefault();postPassenger(firstName, lastName, phoneNumber)}}>
+                        First Name: <input type={"text"} onChange={(event_data) => setFirstName(event_data.target.value)}/>
+                        <br/>
+                        Last Name: <input type={"text"} onChange={(event_data) => setLastName(event_data.target.value)}/>
+                        <br/>
+                        Phone Number: <input type={"text"} onChange={(event_data) => setPhoneNumber(event_data.target.value)}/>
+                        <br/>
+                        <button type={"submit"} className={"post_button"}>Submit</button>
+                    </form>
+                </>
             );
             break;
-        case "cities":
+        case "city":
             tmp = (
-                <div className={"content_panel"}>
-                    <h3>Cities</h3>
-                    Name: <input type={"text"} onChange={(event_data) => setCityName(event_data.target.value)} />
-                    Province: <input type={"text"} onChange={(event_data) => setProvince(event_data.target.value)} />
-                    <button onClick={() => postCity(cityName,province)}>Submit</button>
-                </div>
+                <>
+                    <form className={"post_input"} onSubmit={(e) => {e.preventDefault(); postCity(cityName,province)}} >
+                        Name: <input type={"text"} onChange={(event_data) => setCityName(event_data.target.value)} />
+                        <br/>
+                        Province: <input type={"text"} onChange={(event_data) => setProvince(event_data.target.value)} />
+                        <br/>
+                        <button type={"submit"} className={"post_button"} >Submit</button>
+                    </form>
+                </>
             );
+            break;
+        case "flight":
+            tmp = (
+                <>
+                    <form className={"post_input"} onSubmit={(e) => {e.preventDefault();postFlight(origin,destination,flightNumber)}}>
+                        Flight number: <input type={"text"} onChange={(event_data) => setFlightNumber(event_data.target.value)} />
+                        <br/>
+                        Origin: <input type={"text"} onChange={(event_data) => setOrigin(event_data.target.value)} />
+                        <br/>
+                        Destination: <input type={"text"} onChange={(event_data) => setDestination(event_data.target.value)} />
+                        <br/>
+                        <button type={"submit"} className={"post_button"} >Submit</button>
+                    </form>
+                </>
+            );
+            break;
+        case "airline":
+            tmp = (
+                <>
+                    <form className={"post_input"} onSubmit={(e) => {e.preventDefault();postAirline(cityName,province)}}>
+                        Name: <input type={"text"} onChange={(event_data) => setAirlineName(event_data.target.value)} />
+                        <br/>
+                        Airline Code: <input type={"text"} onChange={(event_data) => setAirlineCode(event_data.target.value)} />
+                        <br/>
+                        Country: <input type={"text"} onChange={(event_data) => setCountry(event_data.target.value)} />
+                        <br/>
+                        <button className={"post_button"}>Submit</button>
+                    </form>
+                </>
+            );
+            break;
+        default:
+            break;
     }
 
-
     return (
-        <div className={"post"}>
+        <div className={"panel"}>
             <form>
-                <label>Data type:</label>
-                <select>
-                    <option value={"airport"} onChange={setOption("airport")}>Airport</option>
-                    <option value={"city"} onChange={setOption("city")}>City</option>
-                    <option value={"aircraft"} onChange={setOption("aircraft")}>Aircraft</option>
-                    <option value={"flight"} onChange={setOption("flight")}>Flight</option>
-                    <option value={"passenger"} onChange={setOption("passenger")}>Passenger</option>
-                    {tmp}
+                <label>Post: </label>
+                <select onChange={(event) => setOption(event.target.value)}>
+                    <option value={"airport"}>Airport</option>
+                    <option value={"city"}>City</option>
+                    <option value={"aircraft"}>Aircraft</option>
+                    <option value={"flight"}>Flight</option>
+                    <option value={"airline"}>Airline</option>
+                    <option value={"passenger"}>Passenger</option>
                 </select>
             </form>
+            <div className={"content_post"}>
+                {tmp}
+            </div>
         </div>
     );
 }
