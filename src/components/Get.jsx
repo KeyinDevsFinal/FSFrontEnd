@@ -21,11 +21,11 @@ const Get = () => {
                 if (!response.ok) {
                     throw new Error("Network response was not ok");
                 } else {
-                    return response.text();
+                    return response.json();
                 }
             })
             .then((data) => {
-                setData(data.json());
+                setData(data);
             })
             .catch((error) => {
                 console.log(error);
