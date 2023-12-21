@@ -7,7 +7,7 @@ import {useState} from "react";
 function App() {
     const [user, setUser] = useState({"username": "", "password": ""});
 
-    App.backendURL = "http://localhost:80";
+    App.backendURL = "Fsbackend1-env.eba-p27fpvz4.us-east-1.elasticbeanstalk.com";
     App.headers = {
         "Content-Type": "application/json",
         "Authorization": "Basic " + btoa("admin" + ":" + "admin")

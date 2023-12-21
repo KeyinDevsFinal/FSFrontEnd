@@ -11,7 +11,7 @@ const Get = () => {
     const [destinationCode, setDestinationCode] = useState(null);
 
     const getData = async (dataKey) => {
-        let url = `http://localhost:80/${dataKey}`;
+        let url = `${App.backendURL}${dataKey}`;
         await fetch(url, {
             method: "GET",
             headers: App.headers
