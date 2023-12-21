@@ -10,9 +10,9 @@ const Get = () => {
     const [originCode, setOriginCode] = useState(null);
     const [destinationCode, setDestinationCode] = useState(null);
 
-    const getData = async (dataKey) => {
+    const getData = (dataKey) => {
         let url = `${App.backendURL}${dataKey}`;
-        await fetch(url, {
+        fetch(url, {
             method: "GET",
             headers: App.headers
         })
@@ -21,12 +21,11 @@ const Get = () => {
                 if (!response.ok) {
                     throw new Error("Network response was not ok");
                 } else {
-                    return response.json();
+                    return response.text();
                 }
             })
             .then((data) => {
-                console.log(data);
-                setData(data);
+                setData(data.json());
             })
             .catch((error) => {
                 console.log(error);
