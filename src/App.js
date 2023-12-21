@@ -7,7 +7,7 @@ import {useState} from "react";
 function App() {
     const [user, setUser] = useState({"username": "", "password": ""});
 
-    App.backendURL = "Fsbackend1-env.eba-p27fpvz4.us-east-1.elasticbeanstalk.com";
+    App.backendURL = "http://Fsbackend1-env.eba-p27fpvz4.us-east-1.elasticbeanstalk.com/";
     App.headers = {
         "Content-Type": "application/json",
         "Authorization": "Basic " + btoa("admin" + ":" + "admin")
@@ -17,7 +17,7 @@ function App() {
         <>
             <Router>
                 <Routes>
-                    <Route path={"/"} element={<Navigate to={"/login"} />}/>
+                    <Route path={"/"} element={<Navigate to={"/home"} />}/>
                     <Route path={"/login"} element={<Login setUser={setUser}/>}/>
                     {user && <Route path={"/home"} element={<Home user={user}/>} />}
                 </Routes>

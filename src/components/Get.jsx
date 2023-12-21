@@ -17,10 +17,19 @@ const Get = () => {
             headers: App.headers
         })
             .then((response) => {
-                return response.json()
+                console.log(response);
+                if (!response.ok) {
+                    throw new Error("Network response was not ok");
+                } else {
+                    return response.json();
+                }
             })
             .then((data) => {
-                setData(data)
+                console.log(data);
+                setData(data);
+            })
+            .catch((error) => {
+                console.log(error);
             });
     }
 
